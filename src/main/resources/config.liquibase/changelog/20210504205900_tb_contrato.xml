@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <changeSet author="leonardo.oliveira" id="20210504202900-1" labels="Criação da tabela Contrato">
+
+        <createSequence sequenceName="SQ_CONTRATO"
+                        startValue="1" incrementBy="1"/>
+
+        <createTable tableName="TB_CONTRATO" >
+
+            <column name="NU_CONTRATO" type="BIGINT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="DT_VIGENCIA" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ID_CLIENTE" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ID_SERVICO" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+
+        </createTable>
+
+        <addForeignKeyConstraint
+                constraintName="FK_TB_CONTRATO_TB_CLIENTE"
+                baseColumnNames="ID_CLIENTE" baseTableName="TB_CONTRATO"
+                referencedColumnNames="ID_CLIENTE" referencedTableName="TB_CLIENTE"/>
+
+        <addForeignKeyConstraint
+                constraintName="FK_TB_CONTRATO_TB_SERVICO"
+                baseColumnNames="ID_SERVICO" baseTableName="TB_CONTRATO"
+                referencedColumnNames="ID_SERVICO" referencedTableName="TB_SERVICO"/>
+    </changeSet>
+
+</databaseChangeLog>

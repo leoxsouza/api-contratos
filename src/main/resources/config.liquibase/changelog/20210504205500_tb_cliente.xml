@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <changeSet author="leonardo.oliveira" id="20210504202900-1" labels="Criação da tabela Contrato">
+
+        <createSequence sequenceName="SQ_CLIENTE"
+                        startValue="1" incrementBy="1"/>
+
+        <createTable tableName="TB_CLIENTE" >
+
+            <column name="ID_CLIENTE" type="BIGINT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="NU_CNPJ" type="VARCHAR(14)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="NOME_CLIENTE" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>
