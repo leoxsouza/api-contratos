@@ -4,7 +4,7 @@ import leonardo.test.venturus.domain.Cliente;
 import leonardo.test.venturus.repository.ClienteRepository;
 import leonardo.test.venturus.service.dto.ClienteDTO;
 import leonardo.test.venturus.service.mapper.ClienteMapper;
-import leonardo.test.venturus.service.util.exception.DuplicationException;
+import leonardo.test.venturus.exception.DuplException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,15 +20,15 @@ public class ClienteService {
 
 	private final ClienteMapper clienteMapper;
 
-	public ClienteDTO save(ClienteDTO clienteDTO) {
+	public ClienteDTO save(ClienteDTO clienteDTO) throws DuplException {
 		verifyExistence(clienteDTO);
 		Cliente cliente = clienteMapper.toEntity(clienteDTO);
 		return clienteMapper.toDto(clienteRepository.save(cliente));
 	}
 
-	private void verifyExistence(ClienteDTO clienteDTO) {
+	private void verifyExistence(ClienteDTO clienteDTO) throws DuplException {
 		if (clienteRepository.existsByCnpj(clienteDTO.getCnpj(), clienteDTO.getId())) {
-			throw new DuplicationException("Já existe um cliente cadastrado com este CNPJ!");
+			throw new DuplException(clienteDTO.getCnpj());
 		}
 	}
 

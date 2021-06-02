@@ -4,12 +4,14 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import leonardo.test.venturus.domain.Cliente;
+import leonardo.test.venturus.exception.DuplException;
 import leonardo.test.venturus.repository.ClienteRepository;
 import leonardo.test.venturus.service.ClienteService;
 import leonardo.test.venturus.service.dto.ClienteDTO;
@@ -76,7 +78,7 @@ public class ClienteResourceIT {
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(jacksonMessageConverter.getObjectMapper()
 				.writeValueAsBytes(dto)))
-			.andExpect(status().isOk()).andReturn().getResponse().getContentAsString(), ClienteDTO.class);
+			.andExpect(status().isCreated()).andReturn().getResponse().getContentAsString(), ClienteDTO.class);
 	}
 
 	@Test
@@ -88,6 +90,12 @@ public class ClienteResourceIT {
 		dto = postDTO(dto);
 
 		assertEquals("Google", dto.getNome());
+	}
+
+	@Test
+	public void createWithException() throws Exception {
+		postDTO(buildDefaultDTO());
+		assertThrows(DuplException.class, () -> postDTO(buildDefaultDTO()));
 	}
 
 	@Test

@@ -5,7 +5,7 @@ import javax.validation.Valid;
 import io.swagger.annotations.ApiParam;
 import leonardo.test.venturus.service.ClienteService;
 import leonardo.test.venturus.service.dto.ClienteDTO;
-import leonardo.test.venturus.service.util.exception.DuplicationException;
+import leonardo.test.venturus.exception.DuplException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -30,10 +31,11 @@ public class ClienteResource {
 
     private final ClienteService clienteService;
 
-    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ClienteDTO> save(@RequestBody @Valid ClienteDTO clienteDTO) {
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public ClienteDTO save(@RequestBody @Valid ClienteDTO clienteDTO) throws DuplException {
         log.info("Request to save Cliente: {}", clienteDTO.toString());
-        return new ResponseEntity<>(clienteService.save(clienteDTO), HttpStatus.OK);
+        return clienteService.save(clienteDTO);
     }
 
 
